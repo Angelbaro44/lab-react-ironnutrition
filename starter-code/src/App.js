@@ -1,18 +1,116 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import foods from './foods.json'
+import 'bulma/css/bulma.css';
+
+
+
+
 
 class App extends Component {
+
+  state =({
+    name: "",
+    calories:'',
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRldIB0rIM7hIuoVIMEgROpr70HaL3vd36vAf7y4_ctc_SAp9Aw&usqp=CAU",
+    quantity: '',
+    foods: foods
+  });
+
+  signUp = (e) => {
+    e.preventDefault() 
+    let allfoods = [...this.state.foods]
+    let newfood = {
+      name:this.state.name,
+      calories:this.state.calories,
+      image:this.state.image,
+      quantity:this.state.quantity,
+    }
+    allfoods.push(newfood)
+    this.setState({
+      foods:allfoods
+    })
+}
+
+  displayFood = () => {
+    return this.state.foods.map((fooditem,index) => {
+      return (
+        // why you need unique keys for React lists resource 1 - https://reactjs.org/docs/lists-and-keys.html#keys
+        // why you need unique keys for React lists resource 2 - https://medium.com/@adhithiravi/why-do-i-need-keys-in-react-lists-dbb522188bbb
+        <div className="box">
+        <article className="media">
+          <div className="media-left">
+            <figure className="image is-64x64">
+              <img src={fooditem.image} />
+            </figure>
+          </div>
+          <div className="media-content">
+            <div className="content">
+              <p>
+                <strong>{fooditem.name}</strong> <br />
+                <small>{fooditem.calories}</small>
+              </p>
+            </div>
+          </div>
+          <div className="media-right">
+            <div className="field has-addons">
+              <div className="control">
+                <input
+                  className="input"
+                  type="number" 
+                  value="1"
+                />
+              </div>
+              <div className="control">
+                <button className="button is-info">
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+      )
+    })
+  }
+
+  onChangeHandler = (e) => this.setState({
+    [e.target.name]: e.target.value
+  })
+
+  // submitbtn = (e) => {
+  //   allFoods.push(this.state.foods)
+  //   }
+
+addForms = () =>{
+  return(
+<form onSubmit = {this.signUp}>
+  <input onChange={this.onChangeHandler} name="name" type='text' value={this.state.name} required placeholder="Enter Food Name"/>
+  {/* <input onChange={this.onChangeHandler} name="image" type='link' value={this.state.image} required placeholder="Enter Food Image "/> */}
+  <input onChange={this.onChangeHandler} name="calories" type='text' value={this.state.calories} required placeholder="Enter Food Calories"/>
+  <input onChange={this.onChangeHandler} name="quantity" type='text' value={this.state.quantity} required placeholder="Enter Food quantity"/>
+  <button>Submit</button>
+</form>
+
+  )}
+
+
+
+
   render() {
+    console.log(this.state.foods)
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <div>
+         
+          {this.addForms()}
+        </div>
+   {this.displayFood()}
       </div>
     );
   }
