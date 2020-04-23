@@ -14,8 +14,9 @@ class App extends Component {
     name: "",
     calories:'',
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRldIB0rIM7hIuoVIMEgROpr70HaL3vd36vAf7y4_ctc_SAp9Aw&usqp=CAU",
-    quantity: '',
-    foods: foods
+    quantity: 0,
+    foods: foods,
+    formstate: false
   });
 
   signUp = (e) => {
@@ -29,7 +30,8 @@ class App extends Component {
     }
     allfoods.push(newfood)
     this.setState({
-      foods:allfoods
+      foods:allfoods,
+      formstate: false
     })
 }
 
@@ -55,11 +57,11 @@ class App extends Component {
           </div>
           <div className="media-right">
             <div className="field has-addons">
-              <div className="control">
+              <div >
                 <input
                   className="input"
                   type="number" 
-                  value="1"
+                  value={fooditem.quantity}
                 />
               </div>
               <div className="control">
@@ -78,23 +80,43 @@ class App extends Component {
   onChangeHandler = (e) => this.setState({
     [e.target.name]: e.target.value
   })
+//   orderfood = () =>{
+//     this.state.filter(obj => { 
+// return (this.state.name includes obj)
+//     })
+//   }
 
-  // submitbtn = (e) => {
-  //   allFoods.push(this.state.foods)
-  //   }
+  formstate = () => {
+    this.setState({
+      formstate: true
+    })
+    }
 
 addForms = () =>{
+  if(this.state.formstate){
   return(
 <form onSubmit = {this.signUp}>
   <input onChange={this.onChangeHandler} name="name" type='text' value={this.state.name} required placeholder="Enter Food Name"/>
   {/* <input onChange={this.onChangeHandler} name="image" type='link' value={this.state.image} required placeholder="Enter Food Image "/> */}
   <input onChange={this.onChangeHandler} name="calories" type='text' value={this.state.calories} required placeholder="Enter Food Calories"/>
   <input onChange={this.onChangeHandler} name="quantity" type='text' value={this.state.quantity} required placeholder="Enter Food quantity"/>
-  <button>Submit</button>
+  <button >Submit</button>
 </form>
-
   )}
-
+else{
+  return (
+  <button onClick={this.formstate}> Submit </button>
+  )}
+  }
+  addsearch = () =>{
+    return(
+      <div>
+        <form>
+        <input onChange={this.orderfood} placeholder="Search"/>
+        </form>
+      </div>
+    )
+  }
 
 
 
@@ -107,10 +129,11 @@ addForms = () =>{
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <div>
-         
-          {this.addForms()}
+          {this.addForms()} 
+          {this.addsearch()} 
+          {this.displayFood()}
+          <h1>My Foods</h1>
         </div>
-   {this.displayFood()}
       </div>
     );
   }
